@@ -40,9 +40,51 @@ const reviews : reviewData = [
   ];
   
 class App {
+    private index : number = 0;
+
     constructor(appRoot: HTMLElement) {
         const reviewPage = new ReveiwPage(reviews);
         appRoot.appendChild(reviewPage.reviewPage);
+
+        reviewPage.setOnPrevListener(this.handlePrevBtnEvent);
+        reviewPage.setOnNextListener(this.handleNextBtnEvent);
+        reviewPage.setOnSurpriseListener(this.handleSupriseBtnEvent);
+    }
+
+    handlePrevBtnEvent = () => {
+      if(this.index > 0) {
+        this.index--;
+        this.updateContents(this.index);
+      } else if (this.index === 0 ) {
+        this.index = reviews.length - 1;
+        this.updateContents(this.index);
+      }
+    }
+
+    handleNextBtnEvent = () => {
+      if(this.index < 3) {
+        this.index++;
+        this.updateContents(this.index);
+      } else if (this.index === 3 ) {
+        this.index = 0;
+        this.updateContents(this.index);
+      }
+    }
+
+    handleSupriseBtnEvent = () => {
+      this.index = Math.floor(Math.random() * 4);
+      this.updateContents(this.index);
+    }
+
+    updateContents = (index : number) => {
+      const img = document.querySelector('#person-img')! as HTMLImageElement;
+      const author = document.querySelector('#author')! as HTMLHeadingElement;
+      const job = document.querySelector('#job')! as HTMLParagraphElement;
+      const text = document.querySelector('#info')! as HTMLParagraphElement;
+      img.src = reviews[index].img;
+      author.textContent = reviews[index].name;
+      job.textContent = reviews[index].job;
+      text.textContent = reviews[index].text;
     }
 }
 

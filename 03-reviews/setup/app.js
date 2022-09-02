@@ -31,8 +31,46 @@ const reviews = [
 ];
 class App {
     constructor(appRoot) {
+        this.index = 0;
+        this.handlePrevBtnEvent = () => {
+            if (this.index > 0) {
+                this.index--;
+                this.updateContents(this.index);
+            }
+            else if (this.index === 0) {
+                this.index = reviews.length - 1;
+                this.updateContents(this.index);
+            }
+        };
+        this.handleNextBtnEvent = () => {
+            if (this.index < 3) {
+                this.index++;
+                this.updateContents(this.index);
+            }
+            else if (this.index === 3) {
+                this.index = 0;
+                this.updateContents(this.index);
+            }
+        };
+        this.handleSupriseBtnEvent = () => {
+            this.index = Math.floor(Math.random() * 4);
+            this.updateContents(this.index);
+        };
+        this.updateContents = (index) => {
+            const img = document.querySelector('#person-img');
+            const author = document.querySelector('#author');
+            const job = document.querySelector('#job');
+            const text = document.querySelector('#info');
+            img.src = reviews[index].img;
+            author.textContent = reviews[index].name;
+            job.textContent = reviews[index].job;
+            text.textContent = reviews[index].text;
+        };
         const reviewPage = new ReveiwPage(reviews);
         appRoot.appendChild(reviewPage.reviewPage);
+        reviewPage.setOnPrevListener(this.handlePrevBtnEvent);
+        reviewPage.setOnNextListener(this.handleNextBtnEvent);
+        reviewPage.setOnSurpriseListener(this.handleSupriseBtnEvent);
     }
 }
 new App(document.querySelector('.container'));
